@@ -1,12 +1,33 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import { Provider } from 'react-redux';
+import { applyMiddleware, combineReducers, createStore, compose } from 'redux';
+import thunk from 'redux-thunk';
+
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import RobotList from './store/reducers/RobotList.reducer';
+import inputReducer from './store/reducers/searchValue.reducer';
+import './index.css'
+
+const rootReducer = combineReducers({
+  robots: RobotList,
+  input: inputReducer,
+
+});
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
+
+const app = (
+  <Provider store={store}>
+    <App />
+  </Provider>
+)
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    {app}
   </React.StrictMode>,
   document.getElementById('root')
 );
